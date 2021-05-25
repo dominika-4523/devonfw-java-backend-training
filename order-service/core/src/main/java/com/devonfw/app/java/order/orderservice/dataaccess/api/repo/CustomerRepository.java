@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.devonfw.app.java.order.orderservice.dataaccess.api.CustomerEntity;
 import com.devonfw.app.java.order.orderservice.logic.api.to.CustomerSearchCriteriaTo;
@@ -18,6 +21,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 /**
  * {@link DefaultRepository} for {@link CustomerEntity}
  */
+@Repository
 public interface CustomerRepository extends DefaultRepository<CustomerEntity> {
 
   /**
@@ -83,6 +87,8 @@ public interface CustomerRepository extends DefaultRepository<CustomerEntity> {
   }
 
   @Override
+  @Modifying
+  @Query("delete from Customer c where c.id = ?1")
   void deleteById(Long id);
 
 }

@@ -4,12 +4,15 @@ import static com.querydsl.core.alias.Alias.$;
 
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devonfw.app.java.order.orderservice.common.api.OrderStatus;
 import com.devonfw.app.java.order.orderservice.dataaccess.api.OrderEntity;
@@ -113,12 +116,12 @@ public interface OrderRepository extends DefaultRepository<OrderEntity> {
     }
   }
 
-  // @Query("FROM OrderSummary o WHERE o.creationDate = ?1 AND o.status = ?2")
-  // List<OrderEntity> findOrdersByDayAndStatus(LocalDate creationDate, OrderStatus status);
-  //
-  // @Transactional
-  // public default void insertOrderWithTwoPositions(OrderEntity order) {
-  //
-  // this.save(order);
-  // }
+  @Query("select o from OrderSummary o where o.creationDate = ?1 and o.status = ?2")
+  List<OrderEntity> findOrdersByDayAndStatus(LocalDate creationDate, OrderStatus status);
+
+  @Transactional
+  public default void insertOrderWithTwoPositions(OrderEntity order) {
+
+    this.save(order);
+  }
 }

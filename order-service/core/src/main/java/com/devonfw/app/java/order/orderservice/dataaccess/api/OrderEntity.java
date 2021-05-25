@@ -3,6 +3,7 @@ package com.devonfw.app.java.order.orderservice.dataaccess.api;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -52,7 +53,7 @@ public class OrderEntity extends ApplicationPersistenceEntity implements Order {
   /**
    * @return orderPositions
    */
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "OrderPosition", joinColumns = @JoinColumn(name = "orderId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "id"))
   public Set<ItemEntity> getOrderPositions() {
 
@@ -70,7 +71,7 @@ public class OrderEntity extends ApplicationPersistenceEntity implements Order {
   /**
    * @return owner
    */
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "ownerId")
   public CustomerEntity getOwner() {
 
