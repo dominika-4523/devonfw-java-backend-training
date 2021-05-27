@@ -120,8 +120,9 @@ public interface OrderRepository extends DefaultRepository<OrderEntity> {
   List<OrderEntity> findOrdersByDayAndStatus(LocalDate creationDate, OrderStatus status);
 
   @Transactional
-  public default void insertOrderWithTwoPositions(OrderEntity order) {
+  public default OrderEntity insertOrderWithTwoPositions(OrderEntity order) {
 
     this.save(order);
+    return order;
   }
 }

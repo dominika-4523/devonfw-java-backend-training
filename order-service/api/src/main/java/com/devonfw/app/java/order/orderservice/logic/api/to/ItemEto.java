@@ -1,8 +1,9 @@
 package com.devonfw.app.java.order.orderservice.logic.api.to;
 
+import com.devonfw.app.java.order.orderservice.common.api.Item;
 import com.devonfw.module.basic.common.api.to.AbstractEto;
 
-public class ItemEto extends AbstractEto {
+public class ItemEto extends AbstractEto implements Item {
 
   private static final long serialVersionUID = 1L;
 

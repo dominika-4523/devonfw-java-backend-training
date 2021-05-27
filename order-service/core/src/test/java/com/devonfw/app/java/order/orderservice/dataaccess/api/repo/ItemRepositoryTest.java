@@ -1,6 +1,7 @@
 package com.devonfw.app.java.order.orderservice.dataaccess.api.repo;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -81,37 +82,25 @@ public class ItemRepositoryTest extends ComponentTest {
   @Test
   public void findItemsByName() {
 
-    // given
-    final ItemSearchCriteriaTo searchCriteria = new ItemSearchCriteriaTo();
-    searchCriteria.setName("Lasagna");
-    Sort sort = Sort.by("name");
-    Pageable pageable = PageRequest.of(0, 20, sort);
-    searchCriteria.setPageable(pageable);
-
     // when
-    Page<ItemEntity> foundItems = this.itemRepository.findByNameAsc(searchCriteria);
+    Set<ItemEntity> foundItems = this.itemRepository.findByNameAsc("Lasagna");
 
     // then
-    assertThat(foundItems.getNumberOfElements()).isEqualTo(1);
+    assertThat(foundItems.size()).isEqualTo(1);
     assertThat(foundItems.iterator().next().getName()).isEqualTo("Lasagna");
   }
 
   @Test
   public void updatePriceForCarbonara() {
 
-    // given
-    final ItemSearchCriteriaTo searchCriteria = new ItemSearchCriteriaTo();
-    searchCriteria.setName("Spaghetti Carbonara");
-    Sort sort = Sort.by("name");
-    Pageable pageable = PageRequest.of(0, 20, sort);
-    searchCriteria.setPageable(pageable);
+    final String name = "Spaghetti Carbonara";
 
     // when
-    this.itemRepository.setPriceByName("Spaghetti Carbonara", 20.0);
-    Page<ItemEntity> foundItems = this.itemRepository.findByNameAsc(searchCriteria);
+    this.itemRepository.setPriceByName(name, 20.0);
+    Set<ItemEntity> foundItems = this.itemRepository.findByNameAsc(name);
 
     // then
-    assertThat(foundItems.getNumberOfElements()).isEqualTo(1);
+    assertThat(foundItems.size()).isEqualTo(1);
     assertThat(foundItems.iterator().next().getName()).isEqualTo("Spaghetti Carbonara");
     assertThat(foundItems.iterator().next().getPrice()).isEqualTo(20.0);
   }

@@ -2,11 +2,14 @@ package com.devonfw.app.java.order.orderservice.dataaccess.api.repo;
 
 import static com.querydsl.core.alias.Alias.$;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,19 +80,8 @@ public interface ItemRepository extends DefaultRepository<ItemEntity> {
     }
   }
 
-  default Page<ItemEntity> findByNameAsc(ItemSearchCriteriaTo criteria) {
-
-    ItemEntity alias = newDslAlias();
-    JPAQuery<ItemEntity> query = newDslQuery(alias);
-    String name = criteria.getName();
-
-    if (name != null && !name.isEmpty()) {
-      QueryUtil.get().whereString(query, $(alias.getName()), name, criteria.getNameOption());
-    }
-    query.orderBy($(alias.getName()).asc());
-
-    return QueryUtil.get().findPaginated(criteria.getPageable(), query, true);
-  }
+  @Query(value = "select * from Item i where i.name = :name order by i.name asc", nativeQuery = true)
+  Set<ItemEntity> findByNameAsc(@Param("name") String name);
 
   @Transactional
   @Modifying
